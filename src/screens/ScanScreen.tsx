@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, Pressable, StyleSheet, Alert, Image } from 'react-native';
-import { CameraView, CameraType, useCameraPermissions, CameraViewRef } from 'expo-camera';
+import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
@@ -15,7 +15,7 @@ export default function ScanScreen({ navigation }: ScanScreenProps) {
   const [permission, requestPermission] = useCameraPermissions();
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const cameraRef = useRef<CameraViewRef>(null);
+  const cameraRef = useRef<CameraView>(null);
   const insets = useSafeAreaInsets();
 
   if (!permission) {
@@ -50,7 +50,7 @@ export default function ScanScreen({ navigation }: ScanScreenProps) {
     if (!cameraRef.current) return;
     
     try {
-      const photo = await cameraRef.current.takePictureAsync({
+      const photo = await (cameraRef.current as any).takePictureAsync({
         quality: 0.8,
         base64: false,
       });

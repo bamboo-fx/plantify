@@ -2,8 +2,8 @@ import React, { useState, useRef } from 'react';
 import { View, Text, FlatList, TextInput, Pressable, Image, KeyboardAvoidingView, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { getOpenAITextResponse } from '../api/chat-service';
 import { ExpertChatMessage } from '../types/plant';
+import { getExpertChatResponse } from '../services/expertChat';
 import * as ImagePicker from 'expo-image-picker';
 
 interface ExpertChatScreenProps {
@@ -66,14 +66,13 @@ export default function ExpertChatScreen({ navigation, route }: ExpertChatScreen
     setIsLoading(true);
 
     try {
-      // Prepare the message for AI
-      const aiMessages = [];
+      let base64Image: string | undefined;
       
       if (imageUri) {
         // Convert image to base64
         const response = await fetch(imageUri);
         const blob = await response.blob();
-        const base64 = await new Promise<string>((resolve) => {
+        base64Image = await new Promise<string>((resolve) => {
           const reader = new FileReader();
           reader.onloadend = () => {
             const result = reader.result as string;
@@ -81,35 +80,17 @@ export default function ExpertChatScreen({ navigation, route }: ExpertChatScreen
           };
           reader.readAsDataURL(blob);
         });
-
-        aiMessages.push({
-          role: 'user' as const,
-          content: [
-            {
-              type: 'text',
-              text: `${text || 'Please analyze this plant image'}. You are an expert botanist and plant care specialist. Provide detailed, accurate, and helpful advice. If you see any plant diseases or issues, mention them and provide treatment recommendations.`
-            },
-            {
-              type: 'image_url',
-              image_url: {
-                url: `data:image/jpeg;base64,${base64}`
-              }
-            }
-          ]
-        });
-      } else {
-        aiMessages.push({
-          role: 'user' as const,
-          content: `${text}. You are an expert botanist and plant care specialist. Provide detailed, accurate, and helpful advice based on the latest plant care knowledge.`
-        });
       }
 
-      const response = await getOpenAITextResponse(aiMessages);
+      const responseContent = await getExpertChatResponse(
+        text || 'Please analyze this plant image',
+        base64Image
+      );
       
       const expertMessage: ExpertChatMessage = {
         id: (Date.now() + 1).toString(),
         role: 'expert',
-        content: response.content,
+        content: responseContent,
         timestamp: new Date(),
       };
 
@@ -236,7 +217,7 @@ export default function ExpertChatScreen({ navigation, route }: ExpertChatScreen
         </View>
         
         <Pressable
-          onPress={() => handleSendMessage(inputText, selectedImage)}
+          onPress={() => handleSendMessage(inputText, selectedImage || undefined)}
           disabled={!inputText.trim() && !selectedImage}
           className={`p-3 rounded-lg ${
             inputText.trim() || selectedImage 

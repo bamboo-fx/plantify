@@ -2,18 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Image, ScrollView, Pressable, Alert, ActivityIndicator } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { getOpenAITextResponse } from '../api/chat-service';
 import { usePlantStore } from '../state/plantStore';
 import { PlantIdentification, PlantInfo, PlantDisease } from '../types/plant';
+import { analyzePlantImage } from '../services/plantAnalysis';
 
-interface PlantResultScreenProps {
-  route: {
-    params: {
-      imageUri: string;
-    };
-  };
-  navigation: any;
-}
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/AppNavigator';
+
+type PlantResultScreenProps = NativeStackScreenProps<RootStackParamList, 'PlantResult'>;
 
 export default function PlantResultScreen({ route, navigation }: PlantResultScreenProps) {
   const { imageUri } = route.params;
@@ -48,73 +44,7 @@ export default function PlantResultScreen({ route, navigation }: PlantResultScre
       });
 
       // Analyze with AI
-      const aiResponse = await getOpenAITextResponse([
-        {
-          role: 'user',
-          content: [
-            {
-              type: 'text',
-              text: `Analyze this plant image and provide detailed information in JSON format with the following structure:
-              {
-                "identification": {
-                  "name": "common name",
-                  "scientificName": "scientific name",
-                  "confidence": 0.95,
-                  "family": "plant family",
-                  "genus": "genus",
-                  "species": "species"
-                },
-                "plantInfo": {
-                  "name": "common name",
-                  "scientificName": "scientific name", 
-                  "description": "detailed description",
-                  "careInstructions": {
-                    "watering": "watering instructions",
-                    "light": "light requirements",
-                    "temperature": "temperature range",
-                    "humidity": "humidity needs",
-                    "fertilizer": "fertilizer recommendations",
-                    "soil": "soil requirements"
-                  },
-                  "toxicity": {
-                    "toxic": true/false,
-                    "toxicTo": ["dogs", "cats", "children"],
-                    "symptoms": ["symptom1", "symptom2"],
-                    "severity": "low/moderate/high"
-                  },
-                  "growthHabits": {
-                    "size": "mature size",
-                    "growthRate": "growth rate",
-                    "bloomTime": "blooming season"
-                  }
-                },
-                "diseaseCheck": {
-                  "hasDisease": true/false,
-                  "diseaseInfo": {
-                    "name": "disease name if any",
-                    "description": "disease description",
-                    "symptoms": ["visible symptoms"],
-                    "treatment": ["treatment steps"],
-                    "prevention": ["prevention tips"],
-                    "severity": "mild/moderate/severe",
-                    "commonCauses": ["cause1", "cause2"]
-                  }
-                }
-              }
-              
-              Focus on accuracy and provide practical care advice. If you cannot identify the plant with confidence, say so.`
-            },
-            {
-              type: 'image_url',
-              image_url: {
-                url: `data:image/jpeg;base64,${base64}`
-              }
-            }
-          ]
-        }
-      ]);
-
-      const analysisResult = JSON.parse(aiResponse.content);
+      const analysisResult = await analyzePlantImage(base64);
       
       // Create identification record
       const identification: PlantIdentification = {
@@ -143,7 +73,17 @@ export default function PlantResultScreen({ route, navigation }: PlantResultScre
 
     } catch (err) {
       console.error('Plant analysis error:', err);
-      setError('Failed to analyze the plant. Please try again with a clearer image.');
+      let errorMessage = 'Failed to analyze the plant. Please try again with a clearer image.';
+      
+      if (err instanceof Error) {
+        if (err.message.includes('parse')) {
+          errorMessage = 'Our AI had trouble processing the image. Please try again with a clearer, well-lit photo of the plant.';
+        } else if (err.message.includes('Invalid response')) {
+          errorMessage = 'Unable to identify this plant. Please ensure the image clearly shows the plant leaves, flowers, or distinctive features.';
+        }
+      }
+      
+      setError(errorMessage);
     } finally {
       setIsAnalyzing(false);
     }
@@ -152,10 +92,12 @@ export default function PlantResultScreen({ route, navigation }: PlantResultScre
   const addToCollection = () => {
     if (!plantInfo) return;
     
-    navigation.navigate('AddToCollection', { 
-      plantInfo,
-      imageUri,
-    });
+    // For now, show a simple alert - can be enhanced later
+    Alert.alert(
+      'Add to Collection',
+      'This feature will allow you to add plants to your personal collection with custom names and care reminders.',
+      [{ text: 'OK' }]
+    );
   };
 
   if (isAnalyzing) {
@@ -404,7 +346,7 @@ export default function PlantResultScreen({ route, navigation }: PlantResultScre
         
         <View className="flex-row space-x-3">
           <Pressable
-            onPress={() => navigation.navigate('ExpertChat', { plantInfo, imageUri })}
+            onPress={() => navigation.navigate('Main')}
             className="flex-1 bg-blue-600 py-3 rounded-lg"
           >
             <Text className="text-white text-center font-medium">Ask Expert</Text>

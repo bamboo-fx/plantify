@@ -3,7 +3,15 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TabNavigator from './TabNavigator';
 import PlantResultScreen from '../screens/PlantResultScreen';
 
-const Stack = createNativeStackNavigator();
+export type RootStackParamList = {
+  Main: undefined;
+  PlantResult: {
+    imageUri: string;
+    identificationData?: any;
+  };
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function AppNavigator() {
   return (

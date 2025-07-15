@@ -128,9 +128,17 @@ export default function ScanScreen({ navigation }: ScanScreenProps) {
             {/* Gallery Button */}
             <Pressable
               onPress={pickFromGallery}
-              className="bg-black/30 rounded-full p-4 mr-8"
+              className="bg-black/30 rounded-full p-4 mr-6"
             >
-              <Ionicons name="images" size={28} color="white" />
+              <Ionicons name="images" size={24} color="white" />
+            </Pressable>
+
+            {/* Manual Entry Button */}
+            <Pressable
+              onPress={() => navigation.navigate('ManualEntry')}
+              className="bg-black/30 rounded-full p-4 mr-6"
+            >
+              <Ionicons name="text" size={24} color="white" />
             </Pressable>
 
             {/* Capture Button */}
@@ -144,17 +152,24 @@ export default function ScanScreen({ navigation }: ScanScreenProps) {
 
             {/* Info Button */}
             <Pressable
-              onPress={() => navigation.navigate('ScanTips')}
-              className="bg-black/30 rounded-full p-4 ml-8"
+              onPress={() => {
+                // Show tips in a simple alert for now
+                Alert.alert(
+                  'Camera Tips',
+                  '• Hold camera steady\n• Ensure good lighting\n• Focus on leaves or flowers\n• Get close to the plant\n• Avoid shadows',
+                  [{ text: 'Got it' }]
+                );
+              }}
+              className="bg-black/30 rounded-full p-4 ml-6"
             >
-              <Ionicons name="information-circle" size={28} color="white" />
+              <Ionicons name="information-circle" size={24} color="white" />
             </Pressable>
           </View>
 
           {/* Instructions */}
           <View className="mt-4 px-8">
             <Text className="text-white text-center text-sm opacity-80">
-              Position the plant clearly in the frame for best results
+              Take a photo, choose from gallery, or search by name
             </Text>
           </View>
         </View>

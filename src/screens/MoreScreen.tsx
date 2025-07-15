@@ -94,6 +94,14 @@ export default function MoreScreen({ navigation }: MoreScreenProps) {
         <Text className="text-lg font-bold text-gray-800 mb-3 mt-6">Plant Tools</Text>
         
         <MenuItem
+          icon="text"
+          title="Manual Plant Search"
+          subtitle="Search plant by name without photo"
+          onPress={() => navigation.navigate('ManualEntry')}
+          color="#3b82f6"
+        />
+        
+        <MenuItem
           icon="leaf"
           title="Weed Identifier"
           subtitle="Identify weeds in your garden"

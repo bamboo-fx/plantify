@@ -1,5 +1,6 @@
 import { getOpenAIClient } from '../api/openai';
 import { getMockPhotoAnalysis } from './mockPlantData';
+import { apiRateLimiter } from '../utils/rateLimiter';
 
 export interface PlantAnalysisResult {
   identification: {
@@ -50,6 +51,12 @@ export interface PlantAnalysisResult {
 
 export const analyzePlantImage = async (base64Image: string): Promise<PlantAnalysisResult> => {
   try {
+    // Check rate limiter
+    if (!apiRateLimiter.canMakeRequest()) {
+      console.warn('Rate limit hit, using mock data');
+      return getMockPhotoAnalysis();
+    }
+
     const client = getOpenAIClient();
     
     const response = await client.chat.completions.create({

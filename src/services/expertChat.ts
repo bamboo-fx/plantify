@@ -1,10 +1,25 @@
 import { getOpenAIClient } from '../api/openai';
+import { apiRateLimiter } from '../utils/rateLimiter';
 
 export const getExpertChatResponse = async (
   message: string, 
   imageBase64?: string
 ): Promise<string> => {
   try {
+    // Check rate limiter
+    if (!apiRateLimiter.canMakeRequest()) {
+      console.warn('Rate limit hit, using mock response');
+      const lowerMessage = message.toLowerCase();
+      
+      if (lowerMessage.includes('water')) {
+        return "Most houseplants prefer to dry out slightly between waterings. Check the soil with your finger - if the top 1-2 inches feel dry, it's time to water. Overwatering is more harmful than underwatering for most plants.";
+      } else if (lowerMessage.includes('light')) {
+        return "Most houseplants thrive in bright, indirect light. This means near a window but not in direct sunlight, which can scorch leaves. If your plant is getting leggy or losing color, it may need more light.";
+      } else {
+        return "I'm providing quick advice due to high demand. For detailed plant care, try our Manual Plant Search or check the care guides in the More tab.";
+      }
+    }
+
     const client = getOpenAIClient();
   
   const messages: any[] = [

@@ -1,9 +1,16 @@
 import { getOpenAIClient } from '../api/openai';
 import { PlantAnalysisResult } from './plantAnalysis';
 import { getMockPlantData } from './mockPlantData';
+import { apiRateLimiter } from '../utils/rateLimiter';
 
 export const analyzeManualPlantEntry = async (plantName: string): Promise<PlantAnalysisResult> => {
   try {
+    // Check rate limiter
+    if (!apiRateLimiter.canMakeRequest()) {
+      console.warn('Rate limit hit, using mock data for:', plantName);
+      return getMockPlantData(plantName);
+    }
+
     const client = getOpenAIClient();
     
     const response = await client.chat.completions.create({

@@ -45,7 +45,7 @@ export default function ExpertChatScreen({ navigation, route }: ExpertChatScreen
       setMessages(prev => [...prev, contextMessage]);
       handleSendMessage(contextMessage.content, route.params.imageUri, false);
     }
-  }, [route?.params]);
+  }, []); // Empty dependency array to run only once on mount
 
   const handleSendMessage = async (text: string, imageUri?: string, addToMessages: boolean = true) => {
     if (!text.trim() && !imageUri) return;

@@ -105,7 +105,11 @@ export default function MoreScreen({ navigation }: MoreScreenProps) {
           icon="leaf"
           title="Weed Identifier"
           subtitle="Identify weeds in your garden"
-          onPress={() => navigation.navigate('WeedIdentifier')}
+          onPress={() => navigation.navigate('ComingSoon', {
+            title: 'Weed Identifier',
+            description: 'This feature will help you identify and manage weeds in your garden using AI-powered image recognition.',
+            icon: 'leaf'
+          })}
           color="#22c55e"
         />
         
@@ -113,7 +117,11 @@ export default function MoreScreen({ navigation }: MoreScreenProps) {
           icon="calculator"
           title="Fertilizer Calculator"
           subtitle="Calculate the right amount for your plants"
-          onPress={() => navigation.navigate('FertilizerCalculator')}
+          onPress={() => navigation.navigate('ComingSoon', {
+            title: 'Fertilizer Calculator',
+            description: 'Calculate the perfect fertilizer amounts and schedules for your plants based on their specific needs.',
+            icon: 'calculator'
+          })}
           color="#8b5cf6"
         />
         
@@ -121,7 +129,11 @@ export default function MoreScreen({ navigation }: MoreScreenProps) {
           icon="calendar"
           title="Plant Calendar"
           subtitle="Seasonal care reminders"
-          onPress={() => navigation.navigate('PlantCalendar')}
+          onPress={() => navigation.navigate('ComingSoon', {
+            title: 'Plant Calendar',
+            description: 'Get seasonal care reminders and track important plant care activities throughout the year.',
+            icon: 'calendar'
+          })}
           color="#06b6d4"
         />
 

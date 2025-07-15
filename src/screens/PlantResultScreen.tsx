@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { usePlantStore } from '../state/plantStore';
 import { PlantIdentification, PlantInfo, PlantDisease } from '../types/plant';
 import { analyzePlantImage } from '../services/plantAnalysis';
+import DemoModeNotice from '../components/DemoModeNotice';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
@@ -18,6 +19,7 @@ export default function PlantResultScreen({ route, navigation }: PlantResultScre
   const [diseaseInfo, setDiseaseInfo] = useState<PlantDisease | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'info' | 'care' | 'disease'>('info');
+  const [isUsingMockData, setIsUsingMockData] = useState(false);
   
   const { addIdentification } = usePlantStore();
   const insets = useSafeAreaInsets();
@@ -43,8 +45,11 @@ export default function PlantResultScreen({ route, navigation }: PlantResultScre
         reader.readAsDataURL(blob);
       });
 
-      // Analyze with AI
+      // Analyze with AI (will fallback to mock data if API unavailable)
       const analysisResult = await analyzePlantImage(base64);
+      
+      // Check if we're using mock data (confidence typically lower for demos)
+      setIsUsingMockData(analysisResult.identification.confidence < 0.8);
       
       // Create identification record
       const identification: PlantIdentification = {

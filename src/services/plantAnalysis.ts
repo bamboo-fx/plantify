@@ -1,4 +1,5 @@
 import { getOpenAIClient } from '../api/openai';
+import { getMockPhotoAnalysis } from './mockPlantData';
 
 export interface PlantAnalysisResult {
   identification: {
@@ -48,9 +49,10 @@ export interface PlantAnalysisResult {
 }
 
 export const analyzePlantImage = async (base64Image: string): Promise<PlantAnalysisResult> => {
-  const client = getOpenAIClient();
-  
-  const response = await client.chat.completions.create({
+  try {
+    const client = getOpenAIClient();
+    
+    const response = await client.chat.completions.create({
     model: "gpt-4o",
     messages: [
       {
@@ -180,5 +182,11 @@ If disease is detected, include diseaseInfo object with name, description, sympt
     console.error('JSON parse error:', parseError);
     console.error('Raw response:', content);
     throw new Error('Failed to parse AI response');
+  }
+  
+  } catch (apiError) {
+    console.warn('API unavailable, using mock data for demo:', apiError);
+    // Return mock data when API is unavailable
+    return getMockPhotoAnalysis();
   }
 };

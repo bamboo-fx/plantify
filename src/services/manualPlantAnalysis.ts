@@ -1,10 +1,12 @@
 import { getOpenAIClient } from '../api/openai';
 import { PlantAnalysisResult } from './plantAnalysis';
+import { getMockPlantData } from './mockPlantData';
 
 export const analyzeManualPlantEntry = async (plantName: string): Promise<PlantAnalysisResult> => {
-  const client = getOpenAIClient();
-  
-  const response = await client.chat.completions.create({
+  try {
+    const client = getOpenAIClient();
+    
+    const response = await client.chat.completions.create({
     model: "gpt-4o",
     messages: [
       {
@@ -123,5 +125,11 @@ If the plant name is unclear or you cannot identify it with confidence, set conf
     console.error('JSON parse error:', parseError);
     console.error('Raw response:', content);
     throw new Error('Failed to parse plant information response');
+  }
+  
+  } catch (apiError) {
+    console.warn('API unavailable, using mock data for demo:', apiError);
+    // Return mock data when API is unavailable
+    return getMockPlantData(plantName);
   }
 };

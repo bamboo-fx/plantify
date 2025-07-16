@@ -2,12 +2,12 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { BlurView } from 'expo-blur';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import ScanScreen from '../screens/ScanScreen';
 import CollectionScreen from '../screens/CollectionScreen';
-import HistoryScreen from '../screens/HistoryScreen';
 import ExpertChatScreen from '../screens/ExpertChatScreen';
-import MoreScreen from '../screens/MoreScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -27,14 +27,8 @@ export default function TabNavigator() {
             case 'Collection':
               iconName = focused ? 'leaf' : 'leaf-outline';
               break;
-            case 'History':
-              iconName = focused ? 'time' : 'time-outline';
-              break;
             case 'Expert':
               iconName = focused ? 'chatbubbles' : 'chatbubbles-outline';
-              break;
-            case 'More':
-              iconName = focused ? 'grid' : 'grid-outline';
               break;
             default:
               iconName = 'help-outline';
@@ -42,26 +36,59 @@ export default function TabNavigator() {
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: '#16a34a',
-        tabBarInactiveTintColor: '#6b7280',
+        tabBarActiveTintColor: '#22c55e',
+        tabBarInactiveTintColor: 'rgba(255, 255, 255, 0.6)',
         tabBarStyle: {
-          backgroundColor: '#ffffff',
+          backgroundColor: 'rgba(74, 85, 104, 0.95)',
           borderTopWidth: 1,
-          borderTopColor: '#e5e7eb',
+          borderTopColor: 'rgba(34, 197, 94, 0.3)',
           paddingBottom: insets.bottom,
           height: 60 + insets.bottom,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: -2 },
+          shadowOpacity: 0.1,
+          shadowRadius: 8,
+          elevation: 8,
         },
         tabBarLabelStyle: {
           fontSize: 12,
-          fontWeight: '500',
+          fontWeight: '600',
         },
+        tabBarBackground: () => (
+          <BlurView 
+            intensity={20} 
+            style={{
+              flex: 1,
+              backgroundColor: 'rgba(34, 197, 94, 0.1)',
+            }}
+          />
+        ),
         headerStyle: {
-          backgroundColor: '#16a34a',
+          backgroundColor: 'transparent',
+          elevation: 0,
+          shadowOpacity: 0,
         },
         headerTintColor: '#ffffff',
         headerTitleStyle: {
           fontWeight: '600',
+          fontSize: 18,
         },
+        headerBackground: () => (
+          <LinearGradient
+            colors={['#059669', '#10b981', '#22c55e']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={{ flex: 1 }}
+          >
+            <BlurView 
+              intensity={30} 
+              style={{
+                flex: 1,
+                backgroundColor: 'rgba(0, 0, 0, 0.1)',
+              }}
+            />
+          </LinearGradient>
+        ),
       })}
     >
       <Tab.Screen 
@@ -81,27 +108,11 @@ export default function TabNavigator() {
         }}
       />
       <Tab.Screen 
-        name="History" 
-        component={HistoryScreen}
-        options={{
-          title: 'History',
-          headerTitle: 'Scan History',
-        }}
-      />
-      <Tab.Screen 
         name="Expert" 
         component={ExpertChatScreen}
         options={{
           title: 'Expert Chat',
           headerTitle: 'Plant Expert',
-        }}
-      />
-      <Tab.Screen 
-        name="More" 
-        component={MoreScreen}
-        options={{
-          title: 'More',
-          headerTitle: 'Plant Care Tools',
         }}
       />
     </Tab.Navigator>

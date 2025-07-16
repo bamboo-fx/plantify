@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, ScrollView, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { usePlantStore } from '../state/plantStore';
+import GradientBackground from '../components/GradientBackground';
+import GlassCard from '../components/GlassCard';
 
 interface MoreScreenProps {
   navigation: any;
@@ -31,31 +33,62 @@ export default function MoreScreen({ navigation }: MoreScreenProps) {
   }) => (
     <Pressable
       onPress={onPress}
-      className="bg-white rounded-lg p-4 mb-3 flex-row items-center border border-gray-200"
+      style={({ pressed }) => [
+        {
+          transform: [{ scale: pressed ? 0.98 : 1 }],
+          opacity: pressed ? 0.9 : 1,
+        }
+      ]}
     >
-      <View className="w-10 h-10 rounded-full items-center justify-center mr-4" style={{ backgroundColor: `${color}20` }}>
-        <Ionicons name={icon} size={24} color={color} />
-      </View>
-      <View className="flex-1">
-        <Text className="font-semibold text-gray-800 text-lg">{title}</Text>
-        {subtitle && (
-          <Text className="text-gray-600 text-sm mt-1">{subtitle}</Text>
-        )}
-      </View>
-      {badge !== undefined && badge > 0 && (
-        <View className="bg-red-500 rounded-full w-6 h-6 items-center justify-center mr-2">
-          <Text className="text-white text-xs font-bold">{badge}</Text>
+      <GlassCard 
+        variant="glass" 
+        intensity={25}
+        style={{ marginBottom: 12 }}
+      >
+        <View className="flex-row items-center">
+          <View 
+            className="w-12 h-12 rounded-full items-center justify-center mr-4" 
+            style={{ 
+              backgroundColor: color + '40',
+              borderWidth: 1,
+              borderColor: color + '60'
+            }}
+          >
+            <Ionicons name={icon} size={26} color={color} />
+          </View>
+          <View className="flex-1">
+            <Text className="font-bold text-white text-lg">{title}</Text>
+            {subtitle && (
+              <Text className="text-white/70 text-sm mt-1">{subtitle}</Text>
+            )}
+          </View>
+          {badge !== undefined && badge > 0 && (
+            <View 
+              className="rounded-full w-7 h-7 items-center justify-center mr-3"
+              style={{
+                backgroundColor: '#ef4444',
+                shadowColor: '#ef4444',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.5,
+                shadowRadius: 4,
+                elevation: 3,
+              }}
+            >
+              <Text className="text-white text-xs font-bold">{badge}</Text>
+            </View>
+          )}
+          <Ionicons name="chevron-forward" size={22} color="rgba(255, 255, 255, 0.6)" />
         </View>
-      )}
-      <Ionicons name="chevron-forward" size={20} color="#9ca3af" />
+      </GlassCard>
     </Pressable>
   );
 
   return (
-    <ScrollView className="flex-1 bg-gray-50">
-      <View className="p-4">
+    <GradientBackground variant="primary">
+      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+        <View className="p-4">
         {/* Plant Care Section */}
-        <Text className="text-lg font-bold text-gray-800 mb-3">Plant Care</Text>
+        <Text className="text-xl font-bold text-white mb-4 mt-2">🌿 Plant Care</Text>
         
         <MenuItem
           icon="water"
@@ -91,7 +124,7 @@ export default function MoreScreen({ navigation }: MoreScreenProps) {
         />
 
         {/* Tools Section */}
-        <Text className="text-lg font-bold text-gray-800 mb-3 mt-6">Plant Tools</Text>
+        <Text className="text-xl font-bold text-white mb-4 mt-8">🛠️ Plant Tools</Text>
         
         <MenuItem
           icon="text"
@@ -169,28 +202,66 @@ export default function MoreScreen({ navigation }: MoreScreenProps) {
         </View>
 
         {/* Settings Section */}
-        <Text className="text-lg font-bold text-gray-800 mb-3 mt-6">Settings</Text>
+        <Text className="text-xl font-bold text-white mb-4 mt-8">⚙️ Settings</Text>
         
         <Pressable
           onPress={() => setNotifications(!notifications)}
-          className="bg-white rounded-lg p-4 mb-3 flex-row items-center justify-between border border-gray-200"
+          style={({ pressed }) => [
+            {
+              transform: [{ scale: pressed ? 0.98 : 1 }],
+              opacity: pressed ? 0.9 : 1,
+            }
+          ]}
         >
-          <View className="flex-row items-center">
-            <View className="w-10 h-10 rounded-full items-center justify-center mr-4 bg-green-100">
-              <Ionicons name="notifications" size={24} color="#16a34a" />
+          <GlassCard 
+            variant="glass" 
+            intensity={25}
+            style={{ marginBottom: 12 }}
+          >
+            <View className="flex-row items-center justify-between">
+              <View className="flex-row items-center flex-1">
+                <View 
+                  className="w-12 h-12 rounded-full items-center justify-center mr-4"
+                  style={{
+                    backgroundColor: '#10b98140',
+                    borderWidth: 1,
+                    borderColor: '#10b98160'
+                  }}
+                >
+                  <Ionicons name="notifications" size={26} color="#10b981" />
+                </View>
+                <View className="flex-1">
+                  <Text className="font-bold text-white text-lg">Notifications</Text>
+                  <Text className="text-white/70 text-sm">
+                    {notifications ? 'Stay updated with plant care reminders' : 'Enable to get care reminders'}
+                  </Text>
+                </View>
+              </View>
+              <View 
+                className={`w-14 h-8 rounded-full p-1 ${notifications ? 'bg-green-500' : 'bg-gray-500'}`}
+                style={{
+                  shadowColor: notifications ? '#10b981' : '#6b7280',
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.3,
+                  shadowRadius: 4,
+                  elevation: 2,
+                }}
+              >
+                <View 
+                  className={`w-6 h-6 rounded-full bg-white transition-transform ${
+                    notifications ? 'translate-x-6' : 'translate-x-0'
+                  }`}
+                  style={{
+                    shadowColor: '#000',
+                    shadowOffset: { width: 0, height: 1 },
+                    shadowOpacity: 0.2,
+                    shadowRadius: 2,
+                    elevation: 2,
+                  }}
+                />
+              </View>
             </View>
-            <View>
-              <Text className="font-semibold text-gray-800 text-lg">Notifications</Text>
-              <Text className="text-gray-600 text-sm">
-                {notifications ? 'Enabled' : 'Disabled'}
-              </Text>
-            </View>
-          </View>
-          <View className={`w-12 h-6 rounded-full ${notifications ? 'bg-green-600' : 'bg-gray-300'}`}>
-            <View className={`w-5 h-5 rounded-full bg-white mt-0.5 transition-transform ${
-              notifications ? 'translate-x-6' : 'translate-x-0.5'
-            }`} />
-          </View>
+          </GlassCard>
         </Pressable>
         
         <MenuItem
@@ -208,7 +279,8 @@ export default function MoreScreen({ navigation }: MoreScreenProps) {
           onPress={() => navigation.navigate('About')}
           color="#64748b"
         />
-      </View>
-    </ScrollView>
+        </View>
+      </ScrollView>
+    </GradientBackground>
   );
 }

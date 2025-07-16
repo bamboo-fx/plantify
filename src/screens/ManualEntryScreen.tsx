@@ -5,6 +5,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { analyzeManualPlantEntry } from '../services/manualPlantAnalysis';
 import { usePlantStore } from '../state/plantStore';
 import { PlantIdentification, PlantInfo } from '../types/plant';
+import GradientBackground from '../components/GradientBackground';
+import GlassCard from '../components/GlassCard';
+import GlassButton from '../components/GlassButton';
 
 interface ManualEntryScreenProps {
   navigation: any;

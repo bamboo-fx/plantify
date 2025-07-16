@@ -3,7 +3,11 @@ import { View, Text, Pressable, StyleSheet, Alert, Image } from 'react-native';
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { BlurView } from 'expo-blur';
+import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
+import GlassButton from '../components/GlassButton';
+import GradientBackground from '../components/GradientBackground';
 
 interface ScanScreenProps {
   navigation: any;
@@ -20,29 +24,61 @@ export default function ScanScreen({ navigation }: ScanScreenProps) {
 
   if (!permission) {
     return (
-      <View className="flex-1 justify-center items-center bg-gray-100">
-        <Text className="text-gray-600">Loading camera...</Text>
-      </View>
+      <GradientBackground variant="primary">
+        <View className="flex-1 justify-center items-center px-6">
+          <BlurView intensity={20} style={{ borderRadius: 16, padding: 24, alignItems: 'center' }}>
+            <Text className="text-white/80 text-lg">Loading camera...</Text>
+          </BlurView>
+        </View>
+      </GradientBackground>
     );
   }
 
   if (!permission.granted) {
     return (
-      <View className="flex-1 justify-center items-center bg-gray-100 px-6">
-        <Ionicons name="camera-outline" size={64} color="#9ca3af" />
-        <Text className="text-lg font-semibold text-gray-800 mb-2 text-center">
-          Camera Access Needed
-        </Text>
-        <Text className="text-gray-600 text-center mb-6">
-          We need camera access to identify plants from photos
-        </Text>
-        <Pressable
-          onPress={requestPermission}
-          className="bg-green-600 px-6 py-3 rounded-lg"
-        >
-          <Text className="text-white font-semibold">Grant Permission</Text>
-        </Pressable>
-      </View>
+      <GradientBackground variant="primary">
+        <View className="flex-1 justify-center items-center px-6">
+          <BlurView 
+            intensity={30} 
+            style={{ 
+              borderRadius: 20, 
+              padding: 32, 
+              alignItems: 'center',
+              borderWidth: 1,
+              borderColor: 'rgba(255, 255, 255, 0.2)',
+            }}
+          >
+            <LinearGradient
+              colors={['rgba(34, 197, 94, 0.8)', 'rgba(16, 185, 129, 0.6)']}
+              style={{
+                width: 80,
+                height: 80,
+                borderRadius: 40,
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginBottom: 24,
+              }}
+            >
+              <Ionicons name="camera-outline" size={40} color="white" />
+            </LinearGradient>
+            
+            <Text className="text-white text-xl font-bold mb-3 text-center">
+              Camera Access Needed
+            </Text>
+            <Text className="text-white/80 text-center mb-8 leading-6">
+              We need camera access to identify plants from photos and help you discover the botanical world around you.
+            </Text>
+            
+            <GlassButton
+              title="Grant Permission"
+              onPress={requestPermission}
+              variant="accent"
+              icon="camera"
+              size="lg"
+            />
+          </BlurView>
+        </View>
+      </GradientBackground>
     );
   }
 
@@ -101,24 +137,70 @@ export default function ScanScreen({ navigation }: ScanScreenProps) {
         >
           <Pressable
             onPress={toggleFlash}
-            className="bg-black/30 rounded-full p-3"
+            style={({ pressed }) => [
+              {
+                transform: [{ scale: pressed ? 0.95 : 1 }],
+                opacity: pressed ? 0.8 : 1,
+              }
+            ]}
           >
-            <Ionicons
-              name={flash ? 'flash' : 'flash-off'}
-              size={24}
-              color="white"
-            />
+            <BlurView 
+              intensity={30} 
+              style={{
+                borderRadius: 20,
+                padding: 12,
+                borderWidth: 1,
+                borderColor: 'rgba(255, 255, 255, 0.2)',
+              }}
+            >
+              <Ionicons
+                name={flash ? 'flash' : 'flash-off'}
+                size={24}
+                color={flash ? '#3b82f6' : 'white'}
+              />
+            </BlurView>
           </Pressable>
           
-          <View className="bg-black/30 rounded-full px-4 py-2">
-            <Text className="text-white font-medium">Point at a plant</Text>
-          </View>
+          <BlurView 
+            intensity={30} 
+            style={{
+              borderRadius: 20,
+              paddingHorizontal: 16,
+              paddingVertical: 8,
+              borderWidth: 1,
+              borderColor: 'rgba(255, 255, 255, 0.2)',
+            }}
+          >
+            <LinearGradient
+              colors={['rgba(34, 197, 94, 0.8)', 'rgba(16, 185, 129, 0.6)']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={{ borderRadius: 16, paddingHorizontal: 8, paddingVertical: 4 }}
+            >
+              <Text className="text-white font-semibold text-sm">🌿 Point at a plant</Text>
+            </LinearGradient>
+          </BlurView>
           
           <Pressable
             onPress={toggleCameraFacing}
-            className="bg-black/30 rounded-full p-3"
+            style={({ pressed }) => [
+              {
+                transform: [{ scale: pressed ? 0.95 : 1 }],
+                opacity: pressed ? 0.8 : 1,
+              }
+            ]}
           >
-            <Ionicons name="camera-reverse" size={24} color="white" />
+            <BlurView 
+              intensity={30} 
+              style={{
+                borderRadius: 20,
+                padding: 12,
+                borderWidth: 1,
+                borderColor: 'rgba(255, 255, 255, 0.2)',
+              }}
+            >
+              <Ionicons name="camera-reverse" size={24} color="white" />
+            </BlurView>
           </Pressable>
         </View>
 
@@ -128,58 +210,165 @@ export default function ScanScreen({ navigation }: ScanScreenProps) {
             {/* Gallery Button */}
             <Pressable
               onPress={pickFromGallery}
-              className="bg-black/30 rounded-full p-4 mr-6"
+              style={({ pressed }) => [
+                {
+                  transform: [{ scale: pressed ? 0.95 : 1 }],
+                  opacity: pressed ? 0.8 : 1,
+                  marginRight: 16
+                }
+              ]}
             >
-              <Ionicons name="images" size={24} color="white" />
+              <BlurView 
+                intensity={40} 
+                style={{
+                  borderRadius: 20,
+                  padding: 16,
+                  borderWidth: 1,
+                  borderColor: 'rgba(255, 255, 255, 0.3)',
+                }}
+              >
+                <Ionicons name="images" size={24} color="white" />
+              </BlurView>
             </Pressable>
 
             {/* Manual Entry Button */}
             <Pressable
               onPress={() => navigation.navigate('ManualEntry')}
-              className="bg-black/30 rounded-full p-4 mr-6"
+              style={({ pressed }) => [
+                {
+                  transform: [{ scale: pressed ? 0.95 : 1 }],
+                  opacity: pressed ? 0.8 : 1,
+                  marginRight: 16
+                }
+              ]}
             >
-              <Ionicons name="text" size={24} color="white" />
+              <BlurView 
+                intensity={40} 
+                style={{
+                  borderRadius: 20,
+                  padding: 16,
+                  borderWidth: 1,
+                  borderColor: 'rgba(255, 255, 255, 0.3)',
+                }}
+              >
+                <Ionicons name="text" size={24} color="white" />
+              </BlurView>
             </Pressable>
 
             {/* Capture Button */}
             <Pressable
               onPress={takePicture}
-              className="bg-white rounded-full p-2"
-              style={styles.captureButton}
+              style={({ pressed }) => [
+                {
+                  transform: [{ scale: pressed ? 0.95 : 1 }],
+                  opacity: pressed ? 0.9 : 1,
+                }
+              ]}
             >
-              <View className="bg-white rounded-full w-16 h-16 border-4 border-gray-300" />
+              <LinearGradient
+                colors={['#22c55e', '#16a34a', '#15803d']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={{
+                  width: 80,
+                  height: 80,
+                  borderRadius: 40,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderWidth: 3,
+                  borderColor: 'rgba(255, 255, 255, 0.4)',
+                }}
+              >
+                <BlurView 
+                  intensity={20} 
+                  style={{
+                    width: 64,
+                    height: 64,
+                    borderRadius: 32,
+                    borderWidth: 3,
+                    borderColor: 'rgba(255, 255, 255, 0.8)',
+                  }}
+                />
+              </LinearGradient>
             </Pressable>
 
             {/* Info Button */}
             <Pressable
               onPress={() => {
-                // Show tips in a simple alert for now
                 Alert.alert(
-                  'Camera Tips',
-                  '• Hold camera steady\n• Ensure good lighting\n• Focus on leaves or flowers\n• Get close to the plant\n• Avoid shadows',
-                  [{ text: 'Got it' }]
+                  '📸 Camera Tips',
+                  '🌿 Hold camera steady\n☀️ Ensure good lighting\n🍃 Focus on leaves or flowers\n📏 Get close to the plant\n🚫 Avoid shadows',
+                  [{ text: 'Got it! 👍' }]
                 );
               }}
-              className="bg-black/30 rounded-full p-4 ml-6"
+              style={({ pressed }) => [
+                {
+                  transform: [{ scale: pressed ? 0.95 : 1 }],
+                  opacity: pressed ? 0.8 : 1,
+                  marginLeft: 16
+                }
+              ]}
             >
-              <Ionicons name="information-circle" size={24} color="white" />
+              <BlurView 
+                intensity={40} 
+                style={{
+                  borderRadius: 20,
+                  padding: 16,
+                  borderWidth: 1,
+                  borderColor: 'rgba(255, 255, 255, 0.3)',
+                }}
+              >
+                <Ionicons name="information-circle" size={24} color="white" />
+              </BlurView>
             </Pressable>
           </View>
 
           {/* Instructions */}
-          <View className="mt-4 px-8">
-            <Text className="text-white text-center text-sm opacity-80">
-              Take a photo, choose from gallery, or search by name
-            </Text>
+          <View className="mt-6 px-8">
+            <BlurView 
+              intensity={30} 
+              style={{
+                borderRadius: 16,
+                paddingHorizontal: 16,
+                paddingVertical: 8,
+                borderWidth: 1,
+                borderColor: 'rgba(255, 255, 255, 0.2)',
+              }}
+            >
+              <Text className="text-white text-center text-sm font-medium">
+                📷 Take a photo • 🖼️ Choose from gallery • ✍️ Search by name
+              </Text>
+            </BlurView>
           </View>
         </View>
 
         {/* Focus Grid (optional visual aid) */}
         <View className="absolute inset-0 z-5 flex justify-center items-center pointer-events-none">
-          <View 
-            className="border-2 border-white/30 rounded-lg"
-            style={{ width: 250, height: 250 }}
-          />
+          <LinearGradient
+            colors={['rgba(34, 197, 94, 0.3)', 'rgba(16, 185, 129, 0.25)', 'rgba(5, 150, 105, 0.2)']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={{
+              width: 280,
+              height: 280,
+              borderRadius: 20,
+              borderWidth: 2,
+              borderColor: 'rgba(255, 255, 255, 0.4)',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <View 
+              style={{
+                width: 240,
+                height: 240,
+                borderRadius: 16,
+                borderWidth: 1,
+                borderColor: 'rgba(255, 255, 255, 0.2)',
+                borderStyle: 'dashed',
+              }}
+            />
+          </LinearGradient>
         </View>
       </CameraView>
     </View>

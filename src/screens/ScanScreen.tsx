@@ -144,13 +144,13 @@ export default function ScanScreen({ navigation }: ScanScreenProps) {
               }
             ]}
           >
-            <BlurView 
-              intensity={30} 
+            <View 
               style={{
                 borderRadius: 20,
                 padding: 12,
+                backgroundColor: 'rgba(0, 0, 0, 0.6)',
                 borderWidth: 1,
-                borderColor: 'rgba(255, 255, 255, 0.2)',
+                borderColor: 'rgba(255, 255, 255, 0.4)',
               }}
             >
               <Ionicons
@@ -158,7 +158,7 @@ export default function ScanScreen({ navigation }: ScanScreenProps) {
                 size={24}
                 color={flash ? '#3b82f6' : 'white'}
               />
-            </BlurView>
+            </View>
           </Pressable>
           
           <BlurView 
@@ -190,17 +190,17 @@ export default function ScanScreen({ navigation }: ScanScreenProps) {
               }
             ]}
           >
-            <BlurView 
-              intensity={30} 
+            <View 
               style={{
                 borderRadius: 20,
                 padding: 12,
+                backgroundColor: 'rgba(0, 0, 0, 0.6)',
                 borderWidth: 1,
-                borderColor: 'rgba(255, 255, 255, 0.2)',
+                borderColor: 'rgba(255, 255, 255, 0.4)',
               }}
             >
               <Ionicons name="camera-reverse" size={24} color="white" />
-            </BlurView>
+            </View>
           </Pressable>
         </View>
 
@@ -218,17 +218,17 @@ export default function ScanScreen({ navigation }: ScanScreenProps) {
                 }
               ]}
             >
-              <BlurView 
-                intensity={40} 
+              <View 
                 style={{
                   borderRadius: 20,
                   padding: 16,
+                  backgroundColor: 'rgba(0, 0, 0, 0.7)',
                   borderWidth: 1,
-                  borderColor: 'rgba(255, 255, 255, 0.3)',
+                  borderColor: 'rgba(255, 255, 255, 0.5)',
                 }}
               >
                 <Ionicons name="images" size={24} color="white" />
-              </BlurView>
+              </View>
             </Pressable>
 
             {/* Manual Entry Button */}
@@ -242,17 +242,17 @@ export default function ScanScreen({ navigation }: ScanScreenProps) {
                 }
               ]}
             >
-              <BlurView 
-                intensity={40} 
+              <View 
                 style={{
                   borderRadius: 20,
                   padding: 16,
+                  backgroundColor: 'rgba(0, 0, 0, 0.7)',
                   borderWidth: 1,
-                  borderColor: 'rgba(255, 255, 255, 0.3)',
+                  borderColor: 'rgba(255, 255, 255, 0.5)',
                 }}
               >
                 <Ionicons name="text" size={24} color="white" />
-              </BlurView>
+              </View>
             </Pressable>
 
             {/* Capture Button */}
@@ -279,12 +279,12 @@ export default function ScanScreen({ navigation }: ScanScreenProps) {
                   borderColor: 'rgba(255, 255, 255, 0.4)',
                 }}
               >
-                <BlurView 
-                  intensity={20} 
+                <View 
                   style={{
                     width: 64,
                     height: 64,
                     borderRadius: 32,
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
                     borderWidth: 3,
                     borderColor: 'rgba(255, 255, 255, 0.8)',
                   }}
@@ -309,36 +309,36 @@ export default function ScanScreen({ navigation }: ScanScreenProps) {
                 }
               ]}
             >
-              <BlurView 
-                intensity={40} 
+              <View 
                 style={{
                   borderRadius: 20,
                   padding: 16,
+                  backgroundColor: 'rgba(0, 0, 0, 0.7)',
                   borderWidth: 1,
-                  borderColor: 'rgba(255, 255, 255, 0.3)',
+                  borderColor: 'rgba(255, 255, 255, 0.5)',
                 }}
               >
                 <Ionicons name="information-circle" size={24} color="white" />
-              </BlurView>
+              </View>
             </Pressable>
           </View>
 
           {/* Instructions */}
           <View className="mt-6 px-8">
-            <BlurView 
-              intensity={30} 
+            <View 
               style={{
                 borderRadius: 16,
                 paddingHorizontal: 16,
                 paddingVertical: 8,
+                backgroundColor: 'rgba(0, 0, 0, 0.6)',
                 borderWidth: 1,
-                borderColor: 'rgba(255, 255, 255, 0.2)',
+                borderColor: 'rgba(255, 255, 255, 0.4)',
               }}
             >
               <Text className="text-white text-center text-sm font-medium">
                 📷 Take a photo • 🖼️ Choose from gallery • ✍️ Search by name
               </Text>
-            </BlurView>
+            </View>
           </View>
         </View>
 

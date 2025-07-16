@@ -29,6 +29,10 @@
         "NSMicrophoneUsageDescription": "Plantify may use the microphone for plant identification features.",
         "NSPhotoLibraryUsageDescription": "Plantify needs access to your photo library to save plant photos and access existing images for identification.",
         "NSLocationWhenInUseUsageDescription": "Plantify uses your location to provide region-specific plant information and care tips.",
+        "NSCalendarsUsageDescription": "Plantify may use calendar access to help you schedule plant care reminders and watering schedules.",
+        "NSContactsUsageDescription": "Plantify may access contacts to help you share plant information and care tips with friends and family.",
+        "NSRemindersUsageDescription": "Plantify may access reminders to help you keep track of plant watering and care schedules.",
+        "NSMotionUsageDescription": "Plantify may use motion data to enhance plant identification accuracy.",
         "ITSAppUsesNonExemptEncryption": false
       }
     },
@@ -41,13 +45,25 @@
       "bundler": "metro"
     },
     "plugins": [
-      "expo-dev-client"
+      "expo-dev-client",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Plantify uses the camera to identify plants and capture photos for your plant collection."
+        }
+      ]
     ],
     "extra": {
       "eas": {
         "projectId": "c01fc10d-4685-4275-90a3-79df3cdc4f77"
       }
     },
-    "owner": "kevxdev"
+    "owner": "kevxdev",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/c01fc10d-4685-4275-90a3-79df3cdc4f77"
+    }
   }
 }

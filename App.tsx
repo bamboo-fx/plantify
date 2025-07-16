@@ -1,7 +1,9 @@
+import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NavigationContainer } from "@react-navigation/native";
 import AppNavigator from "./src/navigation/AppNavigator";
+import AuthScreen from "./src/screens/AuthScreen";
 
 /*
 IMPORTANT NOTICE: DO NOT REMOVE
@@ -25,12 +27,22 @@ const openai_api_key = Constants.expoConfig.extra.apikey;
 */
 
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const handleAuthComplete = () => {
+    setIsAuthenticated(true);
+  };
+
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
-        <AppNavigator />
-        <StatusBar style="auto" />
-      </NavigationContainer>
+      {!isAuthenticated ? (
+        <AuthScreen onAuthComplete={handleAuthComplete} />
+      ) : (
+        <NavigationContainer>
+          <AppNavigator />
+        </NavigationContainer>
+      )}
+      <StatusBar style="light" />
     </SafeAreaProvider>
   );
 }

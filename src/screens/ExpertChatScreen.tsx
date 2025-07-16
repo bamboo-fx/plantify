@@ -211,58 +211,72 @@ export default function ExpertChatScreen({ navigation, route }: ExpertChatScreen
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={{ paddingBottom: insets.bottom }}
         >
-          <View className="p-4 pt-2">
-            <GlassCard variant="glass">
-              <View className="flex-row items-end">
-                <View className="flex-1 mr-3">
-                  <GlassCard variant="neutral" style={{ marginBottom: 0 }}>
-                    <View className="flex-row items-end">
-                      <TextInput
-                        value={inputText}
-                        onChangeText={setInputText}
-                        placeholder="Ask about plant care, diseases, identification..."
-                        multiline
-                        maxLength={500}
-                        className="flex-1 text-white max-h-24"
-                        placeholderTextColor="rgba(255, 255, 255, 0.6)"
-                      />
-                      <Pressable
-                        onPress={pickImage}
-                        className="ml-2 p-1"
-                      >
-                        <Ionicons name="camera" size={24} color="rgba(255, 255, 255, 0.8)" />
-                      </Pressable>
-                    </View>
-                  </GlassCard>
-                </View>
-                
-                <Pressable
-                  onPress={() => handleSendMessage(inputText, selectedImage || undefined)}
-                  disabled={!inputText.trim() && !selectedImage}
-                  style={({ pressed }) => [
-                    {
-                      transform: [{ scale: pressed ? 0.95 : 1 }],
-                      opacity: pressed ? 0.8 : 1,
-                    }
-                  ]}
+          <View className="p-4 pt-2 bg-gray-900/50 border-t border-white/10">
+            <View className="flex-row items-end space-x-3">
+              <View className="flex-1">
+                <View 
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    borderRadius: 20,
+                    borderWidth: 1,
+                    borderColor: 'rgba(255, 255, 255, 0.2)',
+                    paddingHorizontal: 16,
+                    paddingVertical: 12,
+                    minHeight: 50,
+                  }}
                 >
-                  <GlassCard 
-                    variant={inputText.trim() || selectedImage ? 'solid' : 'glass'}
-                    gradient="primary"
-                    style={{ 
-                      marginBottom: 0,
-                      opacity: inputText.trim() || selectedImage ? 1 : 0.5
-                    }}
-                  >
-                    <Ionicons 
-                      name="send" 
-                      size={20} 
-                      color="white"
+                  <View className="flex-row items-end">
+                    <TextInput
+                      value={inputText}
+                      onChangeText={setInputText}
+                      placeholder="Ask about plant care, diseases, identification..."
+                      multiline
+                      maxLength={500}
+                      style={{
+                        flex: 1,
+                        color: 'white',
+                        fontSize: 16,
+                        maxHeight: 100,
+                        minHeight: 20,
+                      }}
+                      placeholderTextColor="rgba(255, 255, 255, 0.6)"
                     />
-                  </GlassCard>
-                </Pressable>
+                    <Pressable
+                      onPress={pickImage}
+                      style={{
+                        marginLeft: 8,
+                        padding: 4,
+                      }}
+                    >
+                      <Ionicons name="camera" size={24} color="rgba(255, 255, 255, 0.8)" />
+                    </Pressable>
+                  </View>
+                </View>
               </View>
-            </GlassCard>
+              
+              <Pressable
+                onPress={() => handleSendMessage(inputText, selectedImage || undefined)}
+                disabled={!inputText.trim() && !selectedImage}
+                style={({ pressed }) => [
+                  {
+                    transform: [{ scale: pressed ? 0.95 : 1 }],
+                    opacity: pressed ? 0.8 : 1,
+                    backgroundColor: (inputText.trim() || selectedImage) ? '#22c55e' : 'rgba(255, 255, 255, 0.2)',
+                    borderRadius: 25,
+                    width: 50,
+                    height: 50,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }
+                ]}
+              >
+                <Ionicons 
+                  name="send" 
+                  size={24} 
+                  color="white"
+                />
+              </Pressable>
+            </View>
           </View>
         </KeyboardAvoidingView>
       </View>
